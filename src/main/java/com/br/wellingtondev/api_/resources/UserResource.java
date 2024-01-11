@@ -1,7 +1,7 @@
 package com.br.wellingtondev.api_.resources;
 
 
-import com.br.wellingtondev.api_.domain.User;
+
 import com.br.wellingtondev.api_.domain.dto.UserDTO;
 import com.br.wellingtondev.api_.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -43,4 +43,12 @@ public class UserResource {
                 .buildAndExpand(service.create(ojb).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO obj){
+        obj.setId(id);
+
+        return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
+    }
+
 }
