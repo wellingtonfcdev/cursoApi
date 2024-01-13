@@ -3,12 +3,11 @@ package com.br.wellingtondev.api_.services.impl;
 import com.br.wellingtondev.api_.domain.User;
 import com.br.wellingtondev.api_.domain.dto.UserDTO;
 import com.br.wellingtondev.api_.repositories.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import com.br.wellingtondev.api_.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
@@ -58,6 +57,18 @@ class UserServiceImplTest {
         assertEquals(ID,response.getId());
         assertEquals(NAME,response.getNome());
         assertEquals(EMAIL,response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado!!"));
+
+        try{
+            service.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado!!",ex.getMessage());
+        }
     }
 
     @Test
